@@ -1,0 +1,565 @@
+<html style="--endless-canvas-width: 633px; --endless-canvas-height: 333px;"><head><script src="gameapi/v1.js?e=https%3A%2F%2Fn-h6anwydfwojhg5keaptn4lasxqo4yzbkezxprfa-0lu-script.googleusercontent.com%2FuserCodeAppPanel"></script><script src="//www.google.com/jsapi"></script><script>window.parent.maeExportApis_();</script>
+
+
+<script id="splash-runtime-prelude-v3">
+(function(){
+  if(/script\.googleusercontent\.com$/i.test(location.hostname)&&!window.__splashDocumentDomainGuardV3){
+    var domainOwner=document;
+    var domainDescriptor=null;
+    while(domainOwner&&!domainDescriptor){
+      domainDescriptor=Object.getOwnPropertyDescriptor(domainOwner,"domain");
+      domainOwner=Object.getPrototypeOf(domainOwner);
+    }
+    if(domainDescriptor&&typeof domainDescriptor.get==="function"&&typeof domainDescriptor.set==="function"){
+      Object.defineProperty(document,"domain",{
+        configurable:true,
+        enumerable:Boolean(domainDescriptor.enumerable),
+        get:function(){return domainDescriptor.get.call(this)},
+        set:function(value){
+          try{return domainDescriptor.set.call(this,value)}
+          catch(error){
+            var message=String(error&&error.message||error||"");
+            if(error&&error.name==="SecurityError"&&/^(?:Failed to set the 'domain' property on 'Document': )?Assignment is forbidden for sandboxed iframes\.?$/i.test(message))return;
+            throw error;
+          }
+        }
+      });
+      window.__splashDocumentDomainGuardV3=true;
+    }
+  }
+  var contexts=[];
+  window.__splashAudioContextsV3=contexts;
+  try{
+    var Native=window.AudioContext||window.webkitAudioContext;
+    if(Native){
+      function TrackedAudioContext(){var context=Reflect.construct(Native,arguments,TrackedAudioContext);contexts.push(context);return context}
+      Object.setPrototypeOf(TrackedAudioContext,Native);
+      TrackedAudioContext.prototype=Native.prototype;
+      if(window.AudioContext)window.AudioContext=TrackedAudioContext;
+      if(window.webkitAudioContext)window.webkitAudioContext=TrackedAudioContext;
+    }
+  }catch(_){}
+  try{
+    if(navigator.serviceWorker&&/script\.googleusercontent\.com$/i.test(location.hostname)){
+      navigator.serviceWorker.register=function(){
+        return Promise.resolve({scope:location.href,unregister:function(){return Promise.resolve(true)},update:function(){return Promise.resolve()}});
+      };
+    }
+  }catch(_){}
+  try{
+    if(window.XMLHttpRequest&&/script\.googleusercontent\.com$/i.test(location.hostname)&&!window.__splashCrossOriginXhrV3){
+      var xhrOpen=XMLHttpRequest.prototype.open;
+      var xhrSetRequestHeader=XMLHttpRequest.prototype.setRequestHeader;
+      XMLHttpRequest.prototype.open=function(method,url){
+        this.__splashCrossOriginRequestV3=false;
+        try{this.__splashCrossOriginRequestV3=new URL(String(url),document.baseURI).origin!==location.origin}catch(_){}
+        return xhrOpen.apply(this,arguments);
+      };
+      XMLHttpRequest.prototype.setRequestHeader=function(name,value){
+        if(this.__splashCrossOriginRequestV3&&/^x-requested-with$/i.test(String(name)))return;
+        return xhrSetRequestHeader.call(this,name,value);
+      };
+      window.__splashCrossOriginXhrV3=true;
+    }
+  }catch(_){}
+})();
+</script>
+<script id="splash-storage-shim-v1">
+(function(){
+  try{
+    var t = window.localStorage;
+    if(t) t.getItem('__splash_probe__');
+  }catch(e){
+    try{
+      var mem={};
+      var fake={
+        getItem:function(k){ return Object.prototype.hasOwnProperty.call(mem,k) ? mem[k] : null; },
+        setItem:function(k,v){ mem[k]=String(v); },
+        removeItem:function(k){ delete mem[k]; },
+        clear:function(){ for(var k in mem) delete mem[k]; },
+        key:function(i){ var ks=Object.keys(mem); return ks[i] || null; },
+        get length(){ return Object.keys(mem).length; }
+      };
+      try{
+        Object.defineProperty(window, 'localStorage', { get:function(){ return fake; }, configurable:true });
+      }catch(_){ try{ window.localStorage=fake; }catch(_){} }
+      try{
+        Object.defineProperty(window, 'sessionStorage', { get:function(){ return fake; }, configurable:true });
+      }catch(_){ try{ window.sessionStorage=fake; }catch(_){} }
+    }catch(_){}
+  }
+})();
+</script>
+<script id="splash-v2-ad-mock" data-v2-ad-mock="">
+(function(){
+  "use strict";
+  if(window.__splashV2AdMock) return; window.__splashV2AdMock = true;
+  function safe(fn){ if(typeof fn==="function") try{ fn(); }catch(e){ setTimeout(function(){ throw e; },0); } }
+  function grantReward(src, cb){
+    return new Promise(function(res){ setTimeout(function(){ safe(cb); try{ window.dispatchEvent(new CustomEvent("splash-v2:reward-granted",{detail:{source:src}})); }catch(_){} res(true); }, 20); });
+  }
+  function finishInterstitial(src, cb){
+    return new Promise(function(res){ setTimeout(function(){ safe(cb); res(true); }, 20); });
+  }
+  // gdsdk / GameDistribution (GameDistribution/Poki/CrazyGames patterns without the big bridge)
+  (function(){
+    var fire=function(name){ var o=window.GD_OPTIONS||window.SDK_OPTIONS; if(o&&typeof o.onEvent==="function") try{ o.onEvent({name:name}); }catch(_){} try{ window.dispatchEvent(new CustomEvent(name)); }catch(_){} };
+    var sdk=window.gdsdk=window.gdsdk||{};
+    if(sdk.__splashMock) return; sdk.__splashMock=true;
+    sdk.AdType=sdk.AdType||{Interstitial:0,Rewarded:1,Display:2};
+    var origShow=sdk.showAd;
+    sdk.showAd=function(type){
+      var rew=type===1||/reward/i.test(String(type));
+      try{ fire("SDK_GAME_PAUSE"); }catch(_){}
+      var p=rew?grantReward("gamedistribution",function(){ fire("SDK_REWARDED_WATCH_COMPLETE"); }):finishInterstitial("gamedistribution");
+      return p.then(function(){ fire("SDK_GAME_START"); return true; });
+    };
+    sdk.preloadAd=sdk.preloadAd||function(){ return Promise.resolve("splash-mock"); };
+    sdk.showBanner=sdk.showBanner||function(){ return Promise.resolve(true); };
+    sdk.hideBanner=sdk.hideBanner||function(){ return Promise.resolve(true); };
+    sdk.cancelAd=sdk.cancelAd||function(){ try{ fire("SDK_GAME_START"); }catch(_){} return Promise.resolve(true); };
+    sdk.openConsole=sdk.openConsole||function(){ return Promise.resolve(true); };
+    sdk.getSession=sdk.getSession||function(){ return Promise.resolve({id:"local"}); };
+    sdk.sendGenericEvent=sdk.sendGenericEvent||function(){ return Promise.resolve(true); };
+    sdk.isPaymentsAvailable=sdk.isPaymentsAvailable||function(){ return Promise.resolve(false); };
+    setTimeout(function(){ try{ fire("SDK_READY"); fire("SDK_GAME_START"); }catch(_){} },0);
+    // block real SDK network fetches from succeeding late
+    try{
+      var isSdkUrl=function(v){ return /(?:html5\.api\.)?gamedistribution\.com|gamemonetize\.com|pm\.azerioncircle\.com\/(?:pkg\/)?@bygd\/gd-sdk/i.test(String(v||"")); };
+      var aC=Node.prototype.appendChild, iB=Node.prototype.insertBefore;
+      Node.prototype.appendChild=function(n){
+        if(n&&n.tagName==="SCRIPT"&&isSdkUrl(n.src)){ setTimeout(function(){ if(typeof n.onload==="function") try{ n.onload(); }catch(_){} },0); return n; }
+        return aC.call(this,n);
+      };
+      Node.prototype.insertBefore=function(n,ref){
+        if(n&&n.tagName==="SCRIPT"&&isSdkUrl(n.src)){ setTimeout(function(){ if(typeof n.onload==="function") try{ n.onload(); }catch(_){} },0); return n; }
+        return iB.call(this,n,ref);
+      };
+    }catch(_){}
+  })();
+  // PokiSDK (if not already patched by big bridge)
+  (function(){
+    if(window.PokiSDK&&window.PokiSDK.__constructPatched) return;
+    var p=window.PokiSDK=window.PokiSDK||{};
+    p.__splashMock=true;
+    p.init=p.init||function(){ return Promise.resolve(); };
+    p.initWithVideoHB=p.initWithVideoHB||p.init;
+    p.setDebug=p.setDebug||function(){};
+    p.setDebugTouchOverlayController=p.setDebugTouchOverlayController||function(){};
+    p.gameLoadingStart=p.gameLoadingStart||function(){};
+    p.gameLoadingProgress=p.gameLoadingProgress||function(){};
+    p.gameLoadingFinished=p.gameLoadingFinished||function(){};
+    p.gameplayStart=p.gameplayStart||function(){};
+    p.gameplayStop=p.gameplayStop||function(){};
+    p.commercialBreak=p.commercialBreak||function(){ return finishInterstitial("poki"); };
+    p.rewardedBreak=p.rewardedBreak||function(){ return grantReward("poki"); };
+    p.displayAd=p.displayAd||function(){ return Promise.resolve(true); };
+    p.destroyAd=p.destroyAd||function(){};
+    p.happyTime=p.happyTime||function(){};
+    p.isAdBlocked=p.isAdBlocked||function(){ return false; };
+    p.getURLParam=p.getURLParam||function(){ return ""; };
+  })();
+  // CrazyGames
+  (function(){
+    var root=window.CrazyGames=window.CrazyGames||{}; root.SDK=root.SDK||{};
+    if(root.SDK.ad&&root.SDK.ad.__splashMock) return;
+    if(root.SDK.ad&&root.SDK.ad.requestAd&&root.SDK.ad.__constructPatched) return;
+    root.SDK.game=root.SDK.game||{loadingStart:function(){},loadingStop:function(){},gameplayStart:function(){},gameplayStop:function(){},happytime:function(){}};
+    root.SDK.ad=root.SDK.ad||{}; root.SDK.ad.__splashMock=true;
+    var prev=root.SDK.ad.requestAd;
+    root.SDK.ad.requestAd=function(type,cbs){
+      cbs=cbs||{}; safe(cbs.adStarted);
+      var rew=/reward/i.test(String(type));
+      var p=rew?grantReward("crazygames"):finishInterstitial("crazygames");
+      return p.then(function(){ safe(cbs.adFinished); return true; });
+    };
+  })();
+  // Y8 / id.net
+  (function(){
+    var id=window.ID=window.ID||{}; if(id.__splashMock) return; id.__splashMock=true;
+    id.isVisible=id.isVisible||function(){ return true; };
+    id.init=id.init||function(){};
+    id.login=id.login||function(cb){ safe(cb); };
+    id.register=id.register||function(cb){ safe(cb); };
+    id.api=id.api||function(r,m,d,cb){ safe(function(){ cb({}); }); };
+    id.Event=id.Event||{subscribe:function(){}};
+    id.Protection=id.Protection||{isBlacklisted:function(cb){ safe(function(){ cb(false); }); },isSponsor:function(cb){ safe(function(){ cb(false); }); }};
+    id.GameAPI=id.GameAPI||{}; id.GameAPI.GameBreak=id.GameAPI.GameBreak||{};
+    var prev=id.GameAPI.GameBreak.request;
+    id.GameAPI.GameBreak.request=id.GameAPI.GameBreak.request||function(pause,resume){ safe(pause); return finishInterstitial("y8",resume); };
+  })();
+  // Yandex stub (minimal so code that calls YaGames doesn't hang)
+  (function(){
+    if(window.YaGames&&window.YaGames.__constructPatched) return;
+    if(window.YaGames&&window.YaGames.__splashMock) return;
+    window.yaContextCb=window.yaContextCb||[]; window.yandexContextAsyncCallbacks=window.yandexContextAsyncCallbacks||[];
+    window.Ya=window.Ya||{}; window.Ya.Context=window.Ya.Context||{};
+    window.Ya.Context.AdvManager=window.Ya.Context.AdvManager||{render:function(){return Promise.resolve();},destroy:function(){}};
+    window.ym=window.ym||function(){};
+    var ysdk={adv:{}};
+    ysdk.adv.showFullscreenAdv=function(o){ var c=o&&o.callbacks||{}; safe(c.onOpen); return finishInterstitial("yandex",function(){ if(typeof c.onClose==="function") c.onClose(true); }); };
+    ysdk.adv.showRewardedVideo=function(o){ var c=o&&o.callbacks||{}; safe(c.onOpen); return grantReward("yandex",c.onRewarded).then(function(){ safe(c.onClose); return true; }); };
+    ysdk.adv.showBannerAdv=ysdk.adv.showBannerAdv||function(){};
+    ysdk.adv.hideBannerAdv=ysdk.adv.hideBannerAdv||function(){};
+    ysdk.getPlayer=ysdk.getPlayer||function(){ return Promise.resolve({getMode:function(){return "lite";},getName:function(){return "Player";},getPhoto:function(){return "";},getUniqueID:function(){return "offline";},getData:function(){return Promise.resolve({});},setData:function(){return Promise.resolve();}}); };
+    window.ysdk=window.ysdk||ysdk;
+    window.YaGames=window.YaGames||{init:function(){ return Promise.resolve(ysdk); }}; window.YaGames.__splashMock=true;
+  })();
+  // Google IMA stub (ima3 — prevents VAST loader hard hang if ad tag missing)
+  (function(){
+    if(window.google&&window.google.ima&&window.google.ima.__splashMock) return;
+    window.google=window.google||{}; window.google.ima=window.google.ima||{}; window.google.ima.__splashMock=true;
+    var ima=window.google.ima;
+    ima.AdDisplayContainer=ima.AdDisplayContainer||function(c,v){ this.initialize=function(){}; this.destroy=function(){}; };
+    ima.AdsLoader=ima.AdsLoader||function(c){ this.requestAds=function(){}; this.contentComplete=function(){}; this.destroy=function(){}; this.addEventListener=function(){}; this.removeEventListener=function(){}; };
+    ima.AdsManager=ima.AdsManager||function(){ this.init=function(){}; this.start=function(){}; this.destroy=function(){}; this.addEventListener=function(){}; this.removeEventListener=function(){}; };
+    ima.ViewMode=ima.ViewMode||{NORMAL:"normal",FULLSCREEN:"fullscreen"};
+    ima.AdsRequest=ima.AdsRequest||function(){};
+    ima.settings=ima.settings||{setVpaidMode:function(){},setLocale:function(){}};
+  })();
+  // Generic rewarded shims (games that expose global showRewardedAd-like names without any SDK)
+  (function(){
+    ["showRewardedAd","ShowRewardedAd","showRewardedVideo","ShowRewardedVideo"].forEach(function(n){
+      if(typeof window[n]!=="function") window[n]=function(cb){ return grantReward("generic",function(){ if(typeof cb==="function") cb(true); }); };
+    });
+  })();
+  // playgama bridge / GameMonetize aliases that appeared in fix-done
+  window.GameMonetize=window.GameMonetize||{};
+  window.bridge=window.bridge||window.playgamaBridge||window.PlayGamaBridge||null;
+  if(!window.bridge) {
+    // keep absent — real SDKs may define later; only ensure advertisement isn't missing when bridge appears
+  }
+})();
+</script>
+
+<style id="splash-v2-glue-style">
+
+</style>
+<script id="splash-v2-glue">
+(function(){
+  'use strict';
+  /* Resize bridge: parent splash forwards fullscreen/resize via postMessage */
+  function redispatch(){ try{ window.dispatchEvent(new Event('resize')); }catch(_){} }
+  window.addEventListener('message', function(e){
+    if (e && e.data === 'splash-v2:resize'){ redispatch(); setTimeout(redispatch, 300); }
+  });
+  /* Audio resume on first gesture (tracked by prelude) */
+  function resumeAudio(){
+    var cs=window.__splashAudioContextsV3||[];
+    for(var i=0;i<cs.length;i++){ try{ if(cs[i].state==='suspended') cs[i].resume(); }catch(_){} }
+    var media=document.querySelectorAll('audio,video');
+    for(var j=0;j<media.length;j++){ try{ if(media[j].paused) media[j].play().catch(function(){}); }catch(_){} }
+  }
+  ['pointerdown','mousedown','touchstart','keydown'].forEach(function(t){
+    window.addEventListener(t, resumeAudio, {capture:true,passive:true});
+  });
+
+  /* Save bridge: mirror localStorage <-> server via google.script.run */
+  try{
+    var ls = window.localStorage;
+    var KEY = '__splash_v2_player__';
+    var playerId = ls.getItem(KEY);
+    if(!playerId){
+      playerId = 'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+      ls.setItem(KEY, playerId);
+    }
+    window.__splashPlayerId = playerId;
+    var gs = window.google && google.script && google.script.run;
+    function snapshot(){
+      var o={};
+      for(var i=0;i<ls.length;i++){
+        var k=ls.key(i);
+        if(k===KEY) continue;
+        try{ o[k]=ls.getItem(k); }catch(_){}
+      }
+      return o;
+    }
+    function save(){
+      if(!gs) return;
+      var data; try{ data=snapshot(); }catch(_){ return; }
+      var json=JSON.stringify(data);
+      if(json.length>200000) return;
+      gs.withFailureHandler(function(){}).saveGameProgress(playerId, data);
+    }
+    if(gs){
+      gs.withSuccessHandler(function(data){
+        if(!data) return;
+        for(var k in data){
+          try{ if(ls.getItem(k)==null) ls.setItem(k, data[k]); }catch(_){}
+        }
+        try{ window.dispatchEvent(new Event('splash-v2:progress-loaded')); }catch(_){}
+        redispatch();
+      }).withFailureHandler(function(){}).loadGameProgress(playerId);
+    }
+    var t=null;
+    function scheduleSave(){ if(t) return; t=setTimeout(function(){ t=null; save(); }, 1500); }
+    try{
+      var origSet = Storage.prototype.setItem;
+      Storage.prototype.setItem = function(k,v){
+        origSet.call(this,k,v);
+        if(this===ls) scheduleSave();
+      };
+    }catch(_){}
+    setInterval(save, 30000);
+    window.addEventListener('pagehide', save);
+    document.addEventListener('visibilitychange', function(){ if(document.hidden) save(); });
+  }catch(_){}
+})();
+</script>
+<base href="https://cdn.jsdelivr.net/gh/cool2fun/assets-5ce7be0a@bf16091488cfb58d3c6f78b279ced38948ec0e9b/"><meta name="google" content="notranslate">
+<script data-local-runtime-shim="">
+window.__gaTracker=window.__gaTracker||function(){};
+window.gdsdk=window.gdsdk||{showAd:function(){return Promise.resolve();},preloadAd:function(){return Promise.resolve();}};
+window.GameMonetize=window.GameMonetize||{};
+</script>
+<title>Endless Truck</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta charset="utf-8">
+
+<style type="text/css">
+
+body {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding:0;
+	border:0;
+	margin: 0px;
+	overflow: hidden;
+	background-color: #023;
+  }
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.WebGLDIV {
+	display: block;
+	width: var(--endless-canvas-width, 100%) !important;
+	height: var(--endless-canvas-height, 100%) !important;
+	max-width: 100% !important;
+	max-height: 100% !important;
+	padding: 0;
+	margin: 0;
+	border: 0 !important;
+	outline: 0;
+	overflow: hidden;
+  }
+
+.ErrorDIV {
+	padding: 20px;
+	margin: auto;
+	margin-top: 20px;
+	overflow: hidden;
+	width: 80%;
+	height: 290px;
+	background-color: #BBB;
+	color: #777;
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+	font-size: 18px;
+	font-weight:normal;
+	text-align: center;
+	-moz-border-radius: 15px; border-radius: 15px;
+	display: none;
+ }
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    background-image:url("html/images/overlay.png");
+}
+
+#DialBox {
+	width: 500px;
+	height: 90%;
+	margin: auto;
+	margin-top: 30px;
+	padding: 6px;
+	z-index: 1001;
+    background-color: #fff;
+	-moz-border-radius: 5px; border-radius: 5px;
+    box-shadow: 0px 2px 100px rgba(0, 0, 0, 1);
+}
+
+#fb-login {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+	width: 250px;
+	height: 200px;
+	margin: 0px;
+	padding: 6px;
+	z-index: 1000;
+    background-color: #fff;
+	-moz-border-radius: 0 5px 0px 5px; border-radius: 0 5px 0px 5px;
+    box-shadow: 0px 2px 100px rgba(0, 0, 0, 1);
+    overflow: hidden;
+}
+</style>
+
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
+
+<script>
+    
+    window.famobi_gameID = "endless-truck";
+    window.famobi_gameJS = ['js/all.js',
+		function(){
+			DLG_WebGLStart();
+
+			window.famobi_Pref_User_Sound = null;
+			window.famobi_Pref_User_Music = null;
+
+			var hidden, visibilityChange;
+			if (typeof document.hidden !== "undefined") { 
+				hidden = "hidden";
+			  	visibilityChange = "visibilitychange";
+			} else if (typeof document.mozHidden !== "undefined") {
+			  	hidden = "mozHidden";
+			  	visibilityChange = "mozvisibilitychange";
+			} else if (typeof document.msHidden !== "undefined") {
+			  	hidden = "msHidden";
+			  	visibilityChange = "msvisibilitychange";
+			} else if (typeof document.webkitHidden !== "undefined") {
+			  	hidden = "webkitHidden";
+			  	visibilityChange = "webkitvisibilitychange";
+			}
+
+			
+			document.addEventListener(visibilityChange, handleVisibilityChange, false);
+
+			
+			
+			function handleVisibilityChange() {
+			  	if (document[hidden]) {
+			    	window.famobi_mute();
+			  	} else {
+			    	window.famobi_unmute();
+				}
+			}
+
+			window.famobi_onPauseRequested = function(){
+			    window.famobi_paused = true;
+			    window.famobi_mute();
+			};
+
+			window.famobi_onResumeRequested = function(){
+				window.famobi_paused = false;
+				window.famobi_unmute();
+			}
+
+			window.famobi_mute = function() {
+				if(window.famobi_Pref_User_Sound === null) window.famobi_Pref_User_Sound = Pref_User_Sound;
+				if(window.famobi_Pref_User_Music === null) window.famobi_Pref_User_Music = v61;
+				Pref_User_Sound = 0;
+				f99()
+			}
+
+			window.famobi_unmute = function() {
+
+				if(window.famobi_paused) return;
+
+				if(window.famobi_Pref_User_Sound !== null) Pref_User_Sound = window.famobi_Pref_User_Sound;
+				if(window.famobi_Pref_User_Music !== null) v61 = window.famobi_Pref_User_Music;
+
+				if(v61) f100 (-1);
+
+			  	window.famobi_Pref_User_Sound = null;
+			  	window.famobi_Pref_User_Music = null;
+			}
+      	}
+    ];
+
+    (function (document, url, fgJS, firstJS) {
+            fgJS = document.createElement('script');
+            firstJS = document.getElementsByTagName('script')[0]	;
+            fgJS.src = url + encodeURIComponent(document.location.href);
+            firstJS.parentNode.insertBefore(fgJS, firstJS);
+    })(document, 'gameapi/v1.js?e=');
+
+    (function () {
+        var resolved = Promise.resolve();
+        var currentScreen = '';
+        window.famobi = {
+            config: { aid: 'standalone' },
+            hasFeature: function (feature) { return feature === 'standalone'; },
+            log: function () {},
+            __: function (text) { return text; },
+            getCurrentLanguage: function () { return 'en'; },
+            getMoreGamesButtonImage: function () { return ''; },
+            moreGamesLink: function () {},
+            rewardedAd: function (callback) {
+                if (typeof callback === 'function') callback({ rewardGranted: false });
+                return resolved;
+            },
+            localStorage: window.localStorage
+        };
+        window.famobi_analytics = {
+            getScreen: function () { return currentScreen; },
+            trackScreen: function (screen) { currentScreen = screen; return resolved; },
+            trackEvent: function () { return resolved; }
+        };
+
+        var gameScript = document.createElement('script');
+        gameScript.src = window.famobi_gameJS[0];
+        gameScript.onload = function () { window.famobi_gameJS[1](); };
+        gameScript.onerror = function () {
+            document.getElementById('dlg-error-div').style.display = 'block';
+        };
+        document.head.appendChild(gameScript);
+    })();
+</script><script src="js/all.js"></script>
+
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1336.0" data-gr-ext-installed="">
+<input autocapitalize="off" autocorrect="off" type="url" id="dlg-textfield" name="lastname" style="margin:0px; position: absolute; top:-50px;" value="Hello" onblur="try{TextField_Selected = -1;}catch(e){}">
+<canvas class="WebGLDIV" id="dlg-webgl-canvas" style="border: 0px; outline: 0px;" width="949" height="618"></canvas>
+<script data-canvas-fit="">
+(function () {
+  var canvas = document.getElementById('dlg-webgl-canvas');
+  if (!canvas) return;
+  var aspectRatio = 1920 / 1012;
+  var applySize = function () {
+    var viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+    var viewportHeight = document.documentElement.clientHeight || window.innerHeight;
+    var width = Math.min(viewportWidth, viewportHeight * aspectRatio);
+    var height = width / aspectRatio;
+    document.documentElement.style.setProperty('--endless-canvas-width', Math.floor(width) + 'px');
+    document.documentElement.style.setProperty('--endless-canvas-height', Math.floor(height) + 'px');
+    canvas.style.border = '0';
+    canvas.style.outline = '0';
+  };
+  applySize();
+  window.addEventListener('resize', applySize);
+})();
+</script>
+<div class="ErrorDIV" id="dlg-error-div"><img src="pics/error.png"><br><span style="font-weight: bold;font-size: 22px;">Could not initialise WebGL</span><br>Your browser seem to not support 3D rendering<br>Please try again with Firefox or Google Chrome</div>
+<div id="overlay">
+<div id="DialBox">
+	<iframe id="OverlayFrame" width="100%" height="100%" frameborder="0" scrolling="vertical" marginheight="0" marginwidth="0" src=""><p>Votre navigateur ne supporte pas l'??ent iframe</p>
+	</iframe>
+	</div>
+	</div>
+
+
+
+</body><grammarly-desktop-integration data-grammarly-shadow-root="true" style="visibility: visible !important;"></grammarly-desktop-integration></html>
